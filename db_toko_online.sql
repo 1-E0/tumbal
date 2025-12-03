@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 03, 2025 at 10:51 AM
+-- Generation Time: Dec 03, 2025 at 04:25 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,6 +24,28 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cart`
+--
+
+CREATE TABLE `cart` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`id`, `user_id`, `product_id`, `quantity`, `created_at`) VALUES
+(1, 3, 2, 4, '2025-12-03 14:52:47'),
+(2, 3, 1, 5, '2025-12-03 14:53:42');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `categories`
 --
 
@@ -39,7 +61,15 @@ CREATE TABLE `categories` (
 INSERT INTO `categories` (`id`, `nama_kategori`) VALUES
 (1, 'Elektronik'),
 (2, 'Pakaian'),
-(3, 'Hobi');
+(3, 'Hobi'),
+(4, 'Kesehatan'),
+(5, 'Makanan & Minuman'),
+(6, 'Otomotif'),
+(7, 'Perlengkapan Rumah'),
+(8, 'Komputer & Laptop'),
+(9, 'Handphone & Tablet'),
+(10, 'Kamera'),
+(11, 'Olahraga');
 
 -- --------------------------------------------------------
 
@@ -119,7 +149,7 @@ CREATE TABLE `shops` (
 
 INSERT INTO `shops` (`id`, `user_id`, `nama_toko`, `deskripsi_toko`, `alamat_toko`, `created_at`) VALUES
 (1, 2, 'Daniel Store', 'Menjual barang elektronik murah', NULL, '2025-12-03 07:01:00'),
-(2, 3, 'TOKO ALI', '', 'jalan wna', '2025-12-03 08:54:49');
+(2, 3, 'ALI ', '', 'jalan wna', '2025-12-03 08:54:49');
 
 -- --------------------------------------------------------
 
@@ -144,11 +174,20 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `password`, `nama_lengkap`, `email`, `role`, `created_at`) VALUES
 (1, 'admin', '$2y$10$UnX.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k', 'Super Admin', NULL, 'admin', '2025-12-03 07:01:00'),
 (2, 'daniel', '$2y$10$UnX.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k', 'Daniel Alvino', NULL, 'member', '2025-12-03 07:01:00'),
-(3, 'alek', '$2y$10$Utu7hJakh/3dc4x6k/LgyuNTTLrRRHy2h.QBQWxMCcyhSJFOywjVm', 'michael ali', 'c14240126@john.petra.ac.id', 'member', '2025-12-03 07:01:56');
+(3, 'alek', '$2y$10$Utu7hJakh/3dc4x6k/LgyuNTTLrRRHy2h.QBQWxMCcyhSJFOywjVm', 'michael ali', 'c14240126@john.petra.ac.id', 'member', '2025-12-03 07:01:56'),
+(4, 'wana', '$2y$10$aTTBO0pW.DyHYzOPOziLSOIO6s92Dt5kvFm4FmKh/59Zh93NVq.Se', 'michael ali', 'wana@gmail.com', 'member', '2025-12-03 15:18:12');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `product_id` (`product_id`);
 
 --
 -- Indexes for table `categories`
@@ -199,10 +238,16 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `cart`
+--
+ALTER TABLE `cart`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `orders`
@@ -232,11 +277,18 @@ ALTER TABLE `shops`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `cart`
+--
+ALTER TABLE `cart`
+  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `orders`
