@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 03, 2025 at 04:09 PM
+-- Generation Time: Dec 03, 2025 at 04:20 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,28 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `db_toko_online`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `cart`
---
-
-CREATE TABLE `cart` (
-  `id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `cart`
---
-
-INSERT INTO `cart` (`id`, `user_id`, `product_id`, `quantity`, `created_at`) VALUES
-(1, 3, 2, 4, '2025-12-03 14:52:47'),
-(2, 3, 1, 5, '2025-12-03 14:53:42');
 
 -- --------------------------------------------------------
 
@@ -174,19 +152,12 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `password`, `nama_lengkap`, `email`, `role`, `created_at`) VALUES
 (1, 'admin', '$2y$10$UnX.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k', 'Super Admin', NULL, 'admin', '2025-12-03 07:01:00'),
 (2, 'daniel', '$2y$10$UnX.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k.k', 'Daniel Alvino', NULL, 'member', '2025-12-03 07:01:00'),
-(3, 'alek', '$2y$10$Utu7hJakh/3dc4x6k/LgyuNTTLrRRHy2h.QBQWxMCcyhSJFOywjVm', 'michael ali', 'c14240126@john.petra.ac.id', 'member', '2025-12-03 07:01:56');
+(3, 'alek', '$2y$10$Utu7hJakh/3dc4x6k/LgyuNTTLrRRHy2h.QBQWxMCcyhSJFOywjVm', 'michael ali', 'c14240126@john.petra.ac.id', 'member', '2025-12-03 07:01:56'),
+(4, 'wana', '$2y$10$aTTBO0pW.DyHYzOPOziLSOIO6s92Dt5kvFm4FmKh/59Zh93NVq.Se', 'michael ali', 'wana@gmail.com', 'member', '2025-12-03 15:18:12');
 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `cart`
---
-ALTER TABLE `cart`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `product_id` (`product_id`);
 
 --
 -- Indexes for table `categories`
@@ -237,12 +208,6 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `cart`
---
-ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
@@ -276,18 +241,11 @@ ALTER TABLE `shops`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
 --
-
---
--- Constraints for table `cart`
---
-ALTER TABLE `cart`
-  ADD CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `orders`
