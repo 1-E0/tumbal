@@ -7,7 +7,7 @@ $role = $_SESSION['role'] ?? 'guest';
 $nama = $_SESSION['nama'] ?? 'Pengunjung';
 $has_shop = false;
 
-// Cek Toko (untuk navbar)
+
 if ($is_logged_in && $role == 'member') {
     $database = new Database();
     $db = $database->getConnection();
@@ -17,7 +17,7 @@ if ($is_logged_in && $role == 'member') {
     if ($stmt->rowCount() > 0) $has_shop = true;
 }
 
-// Logic Filter
+
 $category_id = $_GET['category'] ?? null;
 $search_query = $_GET['search'] ?? null;
 $min_price = $_GET['min'] ?? null;
@@ -26,7 +26,6 @@ $max_price = $_GET['max'] ?? null;
 $database = new Database();
 $db = $database->getConnection();
 
-// Base Query
 $sql = "SELECT p.*, s.nama_toko, c.nama_kategori 
         FROM products p 
         JOIN shops s ON p.shop_id = s.id 
@@ -61,7 +60,7 @@ $stmt = $db->prepare($sql);
 $stmt->execute($params);
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Ambil Kategori untuk Sidebar
+
 $stmt_cat = $db->prepare("SELECT * FROM categories ORDER BY nama_kategori ASC");
 $stmt_cat->execute();
 $categories = $stmt_cat->fetchAll(PDO::FETCH_ASSOC);
@@ -199,7 +198,7 @@ $categories = $stmt_cat->fetchAll(PDO::FETCH_ASSOC);
                             <?php 
                                 if($search_query) echo 'Hasil pencarian: "' . htmlspecialchars($search_query) . '"';
                                 elseif($category_id) {
-                                    // Cari nama kategori terpilih
+                                   
                                     $catName = "Kategori";
                                     foreach($categories as $c) { if($c['id'] == $category_id) $catName = $c['nama_kategori']; }
                                     echo 'Kategori: ' . htmlspecialchars($catName);

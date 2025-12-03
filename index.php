@@ -34,19 +34,18 @@ if (isset($_SESSION['user_id'])) {
 $database = new Database();
 $db = $database->getConnection();
 
-// Produk
+
 $query_produk = "SELECT p.*, s.nama_toko FROM products p JOIN shops s ON p.shop_id = s.id ORDER BY p.created_at DESC LIMIT 12";
 $stmt_produk = $db->prepare($query_produk);
 $stmt_produk->execute();
 $products = $stmt_produk->fetchAll(PDO::FETCH_ASSOC);
 
-// Kategori
 $query_kategori = "SELECT * FROM categories ORDER BY nama_kategori ASC LIMIT 8";
 $stmt_kategori = $db->prepare($query_kategori);
 $stmt_kategori->execute();
 $categories = $stmt_kategori->fetchAll(PDO::FETCH_ASSOC);
 
-// Helper Icon
+
 function getCategoryIcon($name) {
     $name = strtolower($name);
     if(strpos($name, 'elektronik') !== false) return 'fa-mobile-alt';
@@ -77,7 +76,7 @@ function getCategoryIcon($name) {
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #ffffff; }
         
-        /* Highlight text effect */
+    
         .hero-text-highlight {
             background: linear-gradient(120deg, #dbeafe 0%, #dbeafe 100%);
             background-repeat: no-repeat;
@@ -85,7 +84,7 @@ function getCategoryIcon($name) {
             background-position: 0 85%;
         }
         
-        /* Background Gradient Halus untuk Hero Section */
+       
         .bg-hero-gradient {
             background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);
         }
@@ -115,7 +114,9 @@ function getCategoryIcon($name) {
             <div class="flex items-center gap-4 flex-shrink-0">
                 <?php if ($is_logged_in): ?>
                     <a href="#" class="text-slate-500 hover:text-blue-600 p-2 relative transition">
+                        <a href="views/cart.php" class="text-slate-500 hover:text-blue-600 p-2 relative transition">
                         <i class="fas fa-shopping-cart text-xl"></i>
+                        
                         <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">0</span>
                     </a>
                     <div class="h-8 w-px bg-slate-200 hidden md:block"></div>
@@ -248,8 +249,8 @@ function getCategoryIcon($name) {
 
     <footer class="bg-white border-t border-slate-100 py-10 mt-12">
         <div class="container mx-auto px-6 text-center">
-            <p class="font-bold text-slate-800 text-lg mb-2">MarketPlace</p>
-            <p class="text-slate-500 text-sm">&copy; 2025 MarketPlace Project. All rights reserved.</p>
+            <p class="font-bold text-slate-800 text-lg mb-2">Toko Online</p>
+            <p class="text-slate-500 text-sm">&copy; C14240126 Daniel, C14240132 Aldwin .</p>
         </div>
     </footer>
 
@@ -258,7 +259,7 @@ function getCategoryIcon($name) {
         const role = "<?php echo $role; ?>";
 
         $(document).ready(function(){
-            // Dropdown Toggle
+            
             $('#navProfileTrigger').click(function(e){
                 e.stopPropagation(); 
                 $('#navProfileDropdown').slideToggle(150); 
@@ -287,11 +288,25 @@ function getCategoryIcon($name) {
                 Swal.fire('Info', 'Admin tidak bisa belanja.', 'info');
                 return;
             }
-            Swal.fire({
-                icon: 'success', title: 'Berhasil', text: 'Produk masuk keranjang',
-                timer: 1500, showConfirmButton: false, position: 'bottom-end', toast: true
-            });
+            
+    $.ajax({
+        url: 'api/cart.php',
+        type: 'POST',
+        data: { action: 'add', product_id: productId },
+        dataType: 'json',
+        success: function(response) {
+            if(response.status === 'success') {
+                Swal.fire({
+                    icon: 'success', title: 'Berhasil', text: 'Produk masuk keranjang',
+                    timer: 1000, showConfirmButton: false, position: 'bottom-end', toast: true
+                });
+                
+            } else {
+                Swal.fire('Gagal', 'Terjadi kesalahan', 'error');
+            }
         }
+    });
+}
     </script>
 </body>
 </html>
