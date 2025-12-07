@@ -190,9 +190,15 @@ $role = $_SESSION['role'];
                 <div><label class="text-xs font-bold text-slate-500 uppercase ml-1">Nama Produk</label><input type="text" name="nama_produk" class="w-full input-modern rounded-xl p-3 text-sm" required></div>
                 <div class="grid grid-cols-2 gap-4">
                     <div><label class="text-xs font-bold text-slate-500 uppercase ml-1">Kategori</label><select name="category_id" class="w-full input-modern rounded-xl p-3 text-sm"><option value="1">Elektronik</option><option value="2">Pakaian</option><option value="3">Hobi</option></select></div>
-                    <div><label class="text-xs font-bold text-slate-500 uppercase ml-1">Stok</label><input type="number" name="stok" class="w-full input-modern rounded-xl p-3 text-sm" required></div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase ml-1">Stok</label>
+                        <input type="number" name="stok" min="0" oninput="validity.valid||(value='');" class="w-full input-modern rounded-xl p-3 text-sm" required>
+                    </div>
                 </div>
-                <div><label class="text-xs font-bold text-slate-500 uppercase ml-1">Harga (Rp)</label><input type="number" name="harga" class="w-full input-modern rounded-xl p-3 text-sm" required></div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase ml-1">Harga (Rp)</label>
+                    <input type="number" name="harga" min="0" oninput="validity.valid||(value='');" class="w-full input-modern rounded-xl p-3 text-sm" required>
+                </div>
                 <div><label class="text-xs font-bold text-slate-500 uppercase ml-1">Deskripsi</label><textarea name="deskripsi" class="w-full input-modern rounded-xl p-3 text-sm" rows="3"></textarea></div>
                 <div><label class="text-xs font-bold text-slate-500 uppercase ml-1">Foto Produk</label><input type="file" name="gambar" class="w-full text-sm mt-1" required></div>
                 <button type="submit" class="w-full btn-primary py-3 rounded-xl font-bold mt-2">Simpan Produk</button>
@@ -200,16 +206,117 @@ $role = $_SESSION['role'];
         </div>
     </div>
 
+    <div id="modalEdit" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="glass bg-white rounded-3xl w-full max-w-lg shadow-2xl p-8 animate-enter">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-slate-800">Edit Produk</h2>
+                <button onclick="$('#modalEdit').addClass('hidden')" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"><i class="fas fa-times text-slate-500"></i></button>
+            </div>
+            <form id="formEditProduct" enctype="multipart/form-data" class="space-y-4">
+                <input type="hidden" name="action" value="update">
+                <input type="hidden" name="product_id" id="edit_product_id">
+                
+                <div><label class="text-xs font-bold text-slate-500 uppercase ml-1">Nama Produk</label><input type="text" name="nama_produk" id="edit_nama_produk" class="w-full input-modern rounded-xl p-3 text-sm" required></div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div><label class="text-xs font-bold text-slate-500 uppercase ml-1">Kategori</label><select name="category_id" id="edit_category_id" class="w-full input-modern rounded-xl p-3 text-sm"><option value="1">Elektronik</option><option value="2">Pakaian</option><option value="3">Hobi</option></select></div>
+                    <div>
+                        <label class="text-xs font-bold text-slate-500 uppercase ml-1">Stok</label>
+                        <input type="number" name="stok" id="edit_stok" min="0" oninput="validity.valid||(value='');" class="w-full input-modern rounded-xl p-3 text-sm" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase ml-1">Harga (Rp)</label>
+                    <input type="number" name="harga" id="edit_harga" min="0" oninput="validity.valid||(value='');" class="w-full input-modern rounded-xl p-3 text-sm" required>
+                </div>
+                <div><label class="text-xs font-bold text-slate-500 uppercase ml-1">Deskripsi</label><textarea name="deskripsi" id="edit_deskripsi" class="w-full input-modern rounded-xl p-3 text-sm" rows="3"></textarea></div>
+                <div>
+                    <label class="text-xs font-bold text-slate-500 uppercase ml-1">Foto Baru (Opsional)</label>
+                    <input type="file" name="gambar" class="w-full text-sm mt-1">
+                    <p class="text-[10px] text-slate-400 mt-1">*Biarkan kosong jika tidak ingin mengubah foto</p>
+                </div>
+                <button type="submit" class="w-full btn-primary py-3 rounded-xl font-bold mt-2">Update Produk</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalEditShop" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <div class="glass bg-white rounded-3xl w-full max-w-lg shadow-2xl p-8 animate-enter">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-slate-800">Edit Profil Toko</h2>
+                <button onclick="$('#modalEditShop').addClass('hidden')" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"><i class="fas fa-times text-slate-500"></i></button>
+            </div>
+            <form id="formEditShop" class="space-y-4">
+                <input type="hidden" name="action" value="update_shop">
+                <div><label class="text-xs font-bold text-slate-500 uppercase ml-1">Nama Toko</label><input type="text" name="nama_toko" value="<?php echo htmlspecialchars($shop['nama_toko']); ?>" class="w-full input-modern rounded-xl p-3 text-sm" required></div>
+                <div><label class="text-xs font-bold text-slate-500 uppercase ml-1">Alamat</label><input type="text" name="alamat_toko" value="<?php echo htmlspecialchars($shop['alamat_toko']); ?>" class="w-full input-modern rounded-xl p-3 text-sm" required></div>
+                <div><label class="text-xs font-bold text-slate-500 uppercase ml-1">Deskripsi</label><textarea name="deskripsi_toko" class="w-full input-modern rounded-xl p-3 text-sm" rows="3"><?php echo htmlspecialchars($shop['deskripsi_toko']); ?></textarea></div>
+                <button type="submit" class="w-full btn-primary py-3 rounded-xl font-bold mt-2">Simpan Perubahan</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function(){
-            // JS Logic sama persis dengan sebelumnya
             $('#navProfileTrigger').click(function(e){ e.stopPropagation(); $('#navProfileDropdown').slideToggle(150); $('#navChevron').toggleClass('rotate-180'); });
             $(document).click(function(){ $('#navProfileDropdown').slideUp(150); $('#navChevron').removeClass('rotate-180'); });
+
             $("#searchInput").on("keyup", function() { var value = $(this).val().toLowerCase(); $("tbody tr").filter(function() { $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1) }); });
-            $('#formAddProduct').on('submit', function(e){ e.preventDefault(); var formData = new FormData(this); $.ajax({ url: '../api/product.php', type: 'POST', data: formData, contentType: false, processData: false, success: function (data) { if(data.status === 'success'){ Swal.fire({ icon: 'success', title: 'Berhasil', showConfirmButton: false, timer: 1000 }).then(() => location.reload()); } else { Swal.fire('Gagal', data.message, 'error'); } } }); });
+
+            $('#formAddProduct').on('submit', function(e){ 
+                e.preventDefault(); 
+                var formData = new FormData(this); 
+                $.ajax({ 
+                    url: '../api/product.php', type: 'POST', data: formData, contentType: false, processData: false, 
+                    success: function (data) { 
+                        if(data.status === 'success'){ Swal.fire({ icon: 'success', title: 'Berhasil', showConfirmButton: false, timer: 1000 }).then(() => location.reload()); } else { Swal.fire('Gagal', data.message, 'error'); } 
+                    } 
+                }); 
+            });
+
+            $('#formEditProduct').on('submit', function(e){ 
+                e.preventDefault(); 
+                var formData = new FormData(this); 
+                $.ajax({ 
+                    url: '../api/product.php', type: 'POST', data: formData, contentType: false, processData: false, 
+                    success: function (data) { 
+                        if(data.status === 'success'){ Swal.fire({ icon: 'success', title: 'Updated!', showConfirmButton: false, timer: 1000 }).then(() => location.reload()); } else { Swal.fire('Gagal', data.message, 'error'); } 
+                    } 
+                }); 
+            });
+            
+             $('#formEditShop').on('submit', function(e){
+                e.preventDefault();
+                Swal.fire('Info', 'Fitur update toko perlu disesuaikan dengan backend API Anda.', 'info');
+             });
         });
-        // Functions deleteProduct, openEditShopModal, dll tetap sama
-        function deleteProduct(id) { Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya', cancelButtonText: 'Batal' }).then((result) => { if (result.isConfirmed) { $.post('../api/product.php', { action: 'delete', product_id: id }, function() { location.reload(); }, 'json'); } }) }
+
+        function deleteProduct(id) { 
+            Swal.fire({ title: 'Hapus?', icon: 'warning', showCancelButton: true, confirmButtonText: 'Ya', cancelButtonText: 'Batal' }).then((result) => { 
+                if (result.isConfirmed) { $.post('../api/product.php', { action: 'delete', product_id: id }, function(res) { if(res.status==='success') location.reload(); else Swal.fire('Gagal', res.message, 'error'); }, 'json'); } 
+            }) 
+        }
+
+        function openEditModal(id) {
+            $.post('../api/product.php', { action: 'get_detail', product_id: id }, function(res){
+                if(res.status === 'success') {
+                    const p = res.data;
+                    $('#edit_product_id').val(p.id);
+                    $('#edit_nama_produk').val(p.nama_produk);
+                    $('#edit_category_id').val(p.category_id);
+                    $('#edit_stok').val(p.stok);
+                    $('#edit_harga').val(p.harga);
+                    $('#edit_deskripsi').val(p.deskripsi);
+                    
+                    $('#modalEdit').removeClass('hidden');
+                } else {
+                    Swal.fire('Error', 'Gagal mengambil data produk', 'error');
+                }
+            }, 'json');
+        }
+
+        function openEditShopModal() {
+            $('#modalEditShop').removeClass('hidden');
+        }
     </script>
 </body>
 </html>

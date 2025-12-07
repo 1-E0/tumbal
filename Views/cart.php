@@ -161,15 +161,11 @@ foreach($cartItems as $item) { $subtotal += ($item['harga'] * $item['quantity'])
                             <span>Total Harga</span>
                             <span class="font-bold text-slate-800">Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></span>
                         </div>
-                        <div class="flex justify-between text-sm text-slate-600">
-                            <span>Biaya Layanan</span>
-                            <span class="font-medium">Rp 1.000</span>
-                        </div>
                     </div>
 
                     <div class="flex justify-between items-center mb-8">
                         <span class="font-bold text-slate-800 text-lg">Total Tagihan</span>
-                        <span class="font-extrabold text-blue-600 text-xl">Rp <?php echo number_format($subtotal + 1000, 0, ',', '.'); ?></span>
+                        <span class="font-extrabold text-blue-600 text-xl">Rp <?php echo number_format($subtotal, 0, ',', '.'); ?></span>
                     </div>
 
                     <a href="checkout.php" class="w-full btn-primary text-white font-bold py-3.5 rounded-xl shadow-lg flex justify-center items-center gap-2">

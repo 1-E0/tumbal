@@ -202,19 +202,32 @@ $categories = $stmt_cat->fetchAll(PDO::FETCH_ASSOC);
 
                 <?php if(count($products) > 0): ?>
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                        <?php foreach($products as $prod): ?>
+                        <?php foreach($products as $prod): 
+                            $is_out_of_stock = $prod['stok'] <= 0;
+                        ?>
+                            <?php if($is_out_of_stock): ?>
+                            <div class="bg-white rounded-2xl p-3 border border-slate-100 shadow-sm opacity-60 cursor-not-allowed flex flex-col h-full relative">
+                            <?php else: ?>
                             <a href="detail.php?id=<?php echo $prod['id']; ?>" class="bg-white rounded-2xl p-3 border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer flex flex-col h-full relative">
+                            <?php endif; ?>
+
                                 <div class="aspect-[4/3] bg-slate-50 rounded-xl relative overflow-hidden mb-3">
                                     <img src="<?php echo $prod['gambar'] ? '../assets/images/'.$prod['gambar'] : 'https://via.placeholder.com/300'; ?>" 
-                                         class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                         class="w-full h-full object-cover <?php echo $is_out_of_stock ? 'grayscale' : 'group-hover:scale-110'; ?> transition duration-500">
                                     
+                                    <?php if($is_out_of_stock): ?>
+                                        <div class="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                            <span class="text-white font-bold text-sm tracking-widest border-2 border-white px-2 py-1 rounded">HABIS</span>
+                                        </div>
+                                    <?php endif; ?>
+
                                     <div class="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-lg text-[10px] font-bold text-slate-700 flex items-center gap-1 shadow-sm">
                                         <i class="fas fa-store text-blue-500"></i> <?php echo htmlspecialchars($prod['nama_toko']); ?>
                                     </div>
                                 </div>
                                 
                                 <div class="flex flex-col flex-grow px-1">
-                                    <h3 class="font-bold text-slate-800 text-sm line-clamp-2 mb-2 group-hover:text-blue-600 transition">
+                                    <h3 class="font-bold text-slate-800 text-sm line-clamp-2 mb-2 <?php echo !$is_out_of_stock ? 'group-hover:text-blue-600' : ''; ?> transition">
                                         <?php echo htmlspecialchars($prod['nama_produk']); ?>
                                     </h3>
                                     <div class="mt-auto">
@@ -225,13 +238,18 @@ $categories = $stmt_cat->fetchAll(PDO::FETCH_ASSOC);
                                             <div class="flex text-yellow-400 text-[10px] gap-0.5">
                                                 <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
                                             </div>
-                                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition shadow-sm">
-                                                <i class="fas fa-plus"></i>
+                                            <div class="w-8 h-8 rounded-full flex items-center justify-center transition shadow-sm <?php echo $is_out_of_stock ? 'bg-slate-100 text-slate-400' : 'bg-slate-50 text-slate-400 group-hover:bg-blue-600 group-hover:text-white'; ?>">
+                                                <i class="fas <?php echo $is_out_of_stock ? 'fa-ban' : 'fa-plus'; ?>"></i>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            
+                            <?php if($is_out_of_stock): ?>
+                            </div>
+                            <?php else: ?>
                             </a>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </div>
                 <?php else: ?>
