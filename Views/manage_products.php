@@ -39,6 +39,7 @@ $role = $_SESSION['role'];
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body class="text-slate-800 bg-slate-50">
+    <div id="page-transition"></div>
 
     <nav class="glass sticky top-0 z-50 border-b border-slate-200/50">
         <div class="container mx-auto px-6 h-20 flex justify-between items-center">
@@ -121,7 +122,7 @@ $role = $_SESSION['role'];
                         <div class="flex items-center gap-2"><i class="fas fa-calendar text-blue-500"></i> Sejak 2025</div>
                     </div>
                 </div>
-                <button onclick="openEditShopModal()" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-blue-600 px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-sm flex items-center gap-2"><i class="fas fa-edit"></i> Edit Toko</button>
+                <button onclick="toggleModal('modalEditShop', true)" class="bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-blue-600 px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-sm flex items-center gap-2"><i class="fas fa-edit"></i> Edit Toko</button>
             </div>
         </div>
 
@@ -130,7 +131,7 @@ $role = $_SESSION['role'];
                 <h3 class="text-lg font-bold text-slate-800">Daftar Produk</h3>
                 <div class="flex gap-3">
                     <input type="text" id="searchInput" placeholder="Cari produk..." class="input-modern rounded-xl px-4 py-2 text-sm w-64">
-                    <button onclick="$('#modalAdd').removeClass('hidden')" class="btn-primary px-4 py-2 rounded-xl text-sm font-bold shadow-md flex items-center gap-2"><i class="fas fa-plus"></i> Tambah</button>
+                    <button onclick="toggleModal('modalAdd', true)" class="btn-primary px-4 py-2 rounded-xl text-sm font-bold shadow-md flex items-center gap-2"><i class="fas fa-plus"></i> Tambah</button>
                 </div>
             </div>
 
@@ -179,11 +180,11 @@ $role = $_SESSION['role'];
         </div>
     </div>
 
-    <div id="modalAdd" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="glass bg-white rounded-3xl w-full max-w-lg shadow-2xl p-8 animate-enter">
+    <div id="modalAdd" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300 opacity-0 scale-95 pointer-events-none">
+        <div class="glass bg-white rounded-3xl w-full max-w-lg shadow-2xl p-8 transform transition-all duration-300">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-bold text-slate-800">Tambah Produk Baru</h2>
-                <button onclick="$('#modalAdd').addClass('hidden')" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"><i class="fas fa-times text-slate-500"></i></button>
+                <button onclick="toggleModal('modalAdd', false)" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"><i class="fas fa-times text-slate-500"></i></button>
             </div>
             <form id="formAddProduct" enctype="multipart/form-data" class="space-y-4">
                 <input type="hidden" name="action" value="add">
@@ -206,11 +207,11 @@ $role = $_SESSION['role'];
         </div>
     </div>
 
-    <div id="modalEdit" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="glass bg-white rounded-3xl w-full max-w-lg shadow-2xl p-8 animate-enter">
+    <div id="modalEdit" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300 opacity-0 scale-95 pointer-events-none">
+        <div class="glass bg-white rounded-3xl w-full max-w-lg shadow-2xl p-8 transform transition-all duration-300">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-bold text-slate-800">Edit Produk</h2>
-                <button onclick="$('#modalEdit').addClass('hidden')" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"><i class="fas fa-times text-slate-500"></i></button>
+                <button onclick="toggleModal('modalEdit', false)" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"><i class="fas fa-times text-slate-500"></i></button>
             </div>
             <form id="formEditProduct" enctype="multipart/form-data" class="space-y-4">
                 <input type="hidden" name="action" value="update">
@@ -239,11 +240,11 @@ $role = $_SESSION['role'];
         </div>
     </div>
 
-    <div id="modalEditShop" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="glass bg-white rounded-3xl w-full max-w-lg shadow-2xl p-8 animate-enter">
+    <div id="modalEditShop" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all duration-300 opacity-0 scale-95 pointer-events-none">
+        <div class="glass bg-white rounded-3xl w-full max-w-lg shadow-2xl p-8 transform transition-all duration-300">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-bold text-slate-800">Edit Profil Toko</h2>
-                <button onclick="$('#modalEditShop').addClass('hidden')" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"><i class="fas fa-times text-slate-500"></i></button>
+                <button onclick="toggleModal('modalEditShop', false)" class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200"><i class="fas fa-times text-slate-500"></i></button>
             </div>
             <form id="formEditShop" class="space-y-4">
                 <input type="hidden" name="action" value="update_shop">
@@ -256,6 +257,40 @@ $role = $_SESSION['role'];
     </div>
 
     <script>
+        function toggleModal(modalId, show) {
+            const modal = document.getElementById(modalId);
+            if (show) {
+                modal.classList.remove('opacity-0', 'scale-95', 'pointer-events-none');
+                modal.classList.add('opacity-100', 'scale-100', 'pointer-events-auto');
+            } else {
+                modal.classList.remove('opacity-100', 'scale-100', 'pointer-events-auto');
+                modal.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const transitionEl = document.getElementById('page-transition');
+            setTimeout(() => {
+                transitionEl.classList.add('page-loaded');
+            }, 100);
+
+            const links = document.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    const target = this.getAttribute('target');
+                    if (!href || href.startsWith('#') || href.startsWith('javascript') || target === '_blank') {
+                        return;
+                    }
+                    e.preventDefault();
+                    transitionEl.classList.remove('page-loaded');
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 500);
+                });
+            });
+        });
+
         $(document).ready(function(){
             $('#navProfileTrigger').click(function(e){ e.stopPropagation(); $('#navProfileDropdown').slideToggle(150); $('#navChevron').toggleClass('rotate-180'); });
             $(document).click(function(){ $('#navProfileDropdown').slideUp(150); $('#navChevron').removeClass('rotate-180'); });
@@ -306,16 +341,11 @@ $role = $_SESSION['role'];
                     $('#edit_stok').val(p.stok);
                     $('#edit_harga').val(p.harga);
                     $('#edit_deskripsi').val(p.deskripsi);
-                    
-                    $('#modalEdit').removeClass('hidden');
+                    toggleModal('modalEdit', true);
                 } else {
                     Swal.fire('Error', 'Gagal mengambil data produk', 'error');
                 }
             }, 'json');
-        }
-
-        function openEditShopModal() {
-            $('#modalEditShop').removeClass('hidden');
         }
     </script>
 </body>

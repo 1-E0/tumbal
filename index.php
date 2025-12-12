@@ -2,7 +2,6 @@
 session_start();
 require_once 'config/Database.php';
 
-// Logika PHP tetap sama
 $is_logged_in = false;
 $role = 'guest';
 $nama = 'Pengunjung';
@@ -67,6 +66,7 @@ function getCategoryIcon($name) {
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="text-slate-800">
+    <div id="page-transition"></div>
 
     <nav class="glass sticky top-0 z-50 transition-all duration-300">
         <div class="container mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-4">
@@ -185,7 +185,8 @@ function getCategoryIcon($name) {
             <?php if (count($products) > 0): ?>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     <?php foreach($products as $prod): ?>
-                        <a href="views/detail.php?id=<?php echo $prod['id']; ?>" class="bg-white rounded-2xl p-3 border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer flex flex-col h-full relative">
+                        <a href="views/detail.php?id=<?php echo $prod['id']; ?>" class="bg-white rounded-2xl p-3 border border-slate-100 shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group cursor-pointer flex flex-col h-full relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 transform -translate-x-full group-hover:translate-x-full pointer-events-none z-10"></div>
                             <div class="aspect-[4/3] bg-slate-50 rounded-xl relative overflow-hidden mb-3">
                                 <img src="<?php echo $prod['gambar'] ? 'assets/images/'.$prod['gambar'] : 'https://via.placeholder.com/300'; ?>" 
                                      class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
@@ -232,6 +233,48 @@ function getCategoryIcon($name) {
     </footer>
 
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const transitionEl = document.getElementById('page-transition');
+            
+           
+            window.addEventListener('pageshow', function(event) {
+                transitionEl.classList.add('page-loaded');
+            });
+
+           
+            setTimeout(() => {
+                transitionEl.classList.add('page-loaded');
+            }, 50);
+
+            const links = document.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    const target = this.getAttribute('target');
+                    
+                    
+                    if (!href || href.startsWith('#') || href.startsWith('javascript') || target === '_blank') {
+                        return;
+                    }
+
+                  
+                    const currentUrl = new URL(window.location.href);
+                    const targetUrl = new URL(href, window.location.origin);
+
+                    
+                    if (currentUrl.pathname === targetUrl.pathname && currentUrl.origin === targetUrl.origin) {
+                        return; 
+                    }
+
+                    e.preventDefault();
+                    transitionEl.classList.remove('page-loaded');
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 500);
+                });
+            });
+        });
+
         $(document).ready(function(){
             $('#navProfileTrigger').click(function(e){ e.stopPropagation(); $('#navProfileDropdown').slideToggle(150); $('#navChevron').toggleClass('rotate-180'); });
             $(document).click(function(){ $('#navProfileDropdown').slideUp(150); $('#navChevron').removeClass('rotate-180'); });
