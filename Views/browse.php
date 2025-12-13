@@ -166,7 +166,7 @@ $categories = $stmt_cat->fetchAll(PDO::FETCH_ASSOC);
                 <form action="browse.php" method="GET" class="relative group">
                     <input type="text" name="search" value="<?php echo htmlspecialchars($search_query); ?>"
                            class="w-full input-modern rounded-full py-2.5 pl-12 pr-6 text-sm" 
-                           placeholder="Cari barang apa hari ini?">
+                           placeholder="">
                     <i class="fas fa-search absolute left-4 top-3 text-slate-400 group-focus-within:text-blue-500 transition"></i>
                 </form>
             </div>
